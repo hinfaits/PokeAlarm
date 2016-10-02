@@ -3,6 +3,7 @@ import logging
 log = logging.getLogger(__name__)
 
 #Python Modules
+import requests
 from datetime import datetime
 
 #Local Modules
@@ -57,12 +58,17 @@ class Twitter_Alarm(Alarm):
 	def set_alert(self, settings, default):
 		alert = {}
 		alert['status'] = settings.get('status', default['status'])
+		alert['map'] = get_static_map_url(settings.get('map', self.map))
 		return alert
 	
 	#Post Pokemon Status
 	def send_alert(self, alert, info):
-		args = { "status": replace(alert['status'], info)}
-		try_sending(log, self.connect, "Twitter", self.client.statuses.update, args)
+		args = {"status": replace(alert['status'], info)}
+		if alert['map']:
+			args["media[]"] = requests.get(map_url, stream=True).content
+			try_sending(log, self.connect, "Twitter", self.client.statuses.update_with_media, args)
+		else:
+			try_sending(log, self.connect, "Twitter", self.client.statuses.update, args)
 		
 	#Trigger an alert based on Pokemon info
 	def pokemon_alert(self, pokemon_info):
