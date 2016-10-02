@@ -34,6 +34,7 @@ class Twitter_Alarm(Alarm):
 		self.token_key = settings['access_secret']
 		self.con_secret = settings['consumer_key']
 		self.con_secret_key = settings['consumer_secret']
+		self.map = settings.get('map', {})
 		self.startup_message = settings.get('startup_message', "True")
 		self.startup_list = settings.get('startup_list', "True")
 				
