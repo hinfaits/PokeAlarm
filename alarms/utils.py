@@ -284,7 +284,6 @@ def get_static_map_url(settings):
 	height = settings.get('height', '125')
 	maptype = settings.get('maptype', 'roadmap')
 	zoom = settings.get('zoom', '15')
-	scale = settings.get('scale', '1')
 
 	center = '{},{}'.format('<lat>','<lng>')
 	query_center = 'center={}'.format(center)
@@ -292,11 +291,10 @@ def get_static_map_url(settings):
 	query_size = 'size={}x{}'.format(width, height)
 	query_zoom = 'zoom={}'.format(zoom)
 	query_maptype = 'maptype={}'.format(maptype)
-	query_scale = 'scale={}'.format(scale)
 	
 	map = ('https://maps.googleapis.com/maps/api/staticmap?' +
 				query_center + '&' + query_markers + '&' +
-				query_maptype + '&' + query_size + '&' +
+				query_maptype + '&' + query_size + '&' + query_zoom)
 	
 	if 'API_KEY' in config:
 		map = map + ('&key=%s' % config['API_KEY'])
