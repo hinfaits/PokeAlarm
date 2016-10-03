@@ -66,7 +66,7 @@ class Twitter_Alarm(Alarm):
 	def send_alert(self, alert, info):
 		args = {"status": replace(alert['status'], info)}
 		if alert['map']:
-			args["media[]"] = requests.get(replace(alert['map'], {'lat':lat, 'lng':lng}), stream=True).content
+			args["media[]"] = requests.get(replace(alert['map'], {'lat':info['lat'], 'lng':info['lng']}), stream=True).content
 			try_sending(log, self.connect, "Twitter", self.client.statuses.update_with_media, args)
 		else:
 			try_sending(log, self.connect, "Twitter", self.client.statuses.update, args)
