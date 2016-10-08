@@ -66,7 +66,7 @@ class Twitter_Alarm(Alarm):
 	def send_alert(self, alert, info):
 		args = {"status": replace(alert['status'], info)}
 		if alert['map']:
-			args["media[]"] = requests.get(replace(alert['map'], {'lat':info['lat'], 'lng':info['lng']}), stream=True).content
+			args["media[]"] = self.make_map(alert['map'], info['lat'], info['lng'])
 			try_sending(log, self.connect, "Twitter", self.client.statuses.update_with_media, args)
 		else:
 			try_sending(log, self.connect, "Twitter", self.client.statuses.update, args)
@@ -82,3 +82,11 @@ class Twitter_Alarm(Alarm):
 	#Trigger an alert based on Gym info
 	def gym_alert(self, gym_info):
 		self.send_alert(self.gym, gym_info)
+
+	# Build a query for a static map of the pokemon location
+	def make_map(self, map_url, lat, lng):
+		if map_url is None: #If no map is set
+			return None
+		
+		request = requests.get(replace(alert['map'], {'lat':info['lat'], 'lng':info['lng']}), stream=True)
+		return request.content
